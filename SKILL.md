@@ -396,223 +396,55 @@ HTML 排版必须使用 V4 风格模板（见下方）。
 
 ---
 
-## HTML 模板（V4 风格）
+## HTML 模板（当前 V5.2 风格）
 
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>每日体彩军师 - AI 分析面板</title>
-    <style>
-        :root {
-            --bg: #f4f7fb;
-            --card: #ffffff;
-            --ink: #202124;
-            --muted: #999ca6;
-            --pill: #f1f2f7;
-            --line: #eceef3;
-            --green: #34c759;
-            --orange: #ff9500;
-            --red: #ff3b30;
-            --blue: #007aff;
-            --shadow: 0 22px 48px rgba(40, 52, 72, 0.08);
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-            background: var(--bg);
-            color: var(--ink);
-            margin: 0;
-            padding: 72px 56px;
-        }
-        .page { max-width: 1840px; width: 100%; margin: 0 auto; }
-        .hero { text-align: center; margin: 0 auto 36px; max-width: 1180px; }
-        .kicker {
-            display: inline-flex; align-items: center;
-            color: #2c7a54; background: rgba(52, 199, 89, 0.09);
-            border: 1px solid rgba(52, 199, 89, 0.18);
-            border-radius: 999px; padding: 8px 14px;
-            font-size: 12px; font-weight: 850; margin-bottom: 16px;
-        }
-        .hero-title { font-size: clamp(34px, 5vw, 58px); line-height: 1.04; font-weight: 900; margin: 0; }
-        .hero-copy { color: var(--muted); font-size: 17px; line-height: 1.68; margin: 16px auto 0; max-width: 760px; font-weight: 650; }
-        .meta { color: #9b9faa; font-size: 13px; line-height: 1.6; margin-top: 14px; }
-        .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 28px auto 0; }
-        .summary-card {
-            background: rgba(255, 255, 255, 0.86); border: 1px solid #e8ebf1;
-            border-radius: 16px; padding: 16px 18px; text-align: left;
-            box-shadow: 0 12px 34px rgba(40, 52, 72, 0.045);
-        }
-        .summary-card b { display: block; font-size: 24px; line-height: 1.1; font-weight: 900; }
-        .summary-card span { color: var(--muted); display: block; font-size: 12px; line-height: 1.45; margin-top: 4px; font-weight: 700; }
-        .overview { margin: 0 0 34px; }
-        .overview-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 14px; }
-        .overview-title { font-size: 24px; line-height: 1.2; font-weight: 900; margin: 0; }
-        .overview-note { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; max-width: 660px; font-weight: 650; }
-        .table-shell { background: rgba(255, 255, 255, 0.9); border: 1px solid #e8ebf1; border-radius: 20px; box-shadow: var(--shadow); overflow: auto; }
-        table { width: 100%; min-width: 920px; border-collapse: collapse; }
-        th, td { border-bottom: 1px solid var(--line); padding: 16px 18px; font-size: 13px; line-height: 1.55; text-align: left; font-weight: 700; }
-        th { color: #858a96; background: #fafbfe; font-weight: 850; }
-        tr:last-child td { border-bottom: none; }
-        .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: start; }
-        .plan-card {
-            --accent: var(--green); min-height: 405px;
-            background: var(--card); border: 1px solid #e8ebf1; border-radius: 24px;
-            padding: 28px; box-shadow: var(--shadow);
-            display: flex; flex-direction: column;
-        }
-        .plan-card.value { --accent: var(--orange); }
-        .plan-card.danger { --accent: var(--red); }
-        .plan-card.matrix { --accent: var(--blue); }
-        .card-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; }
-        h1 { color: var(--accent); font-size: 24px; line-height: 1.18; margin: 0; font-weight: 850; }
-        .tag { color: #8f929c; background: var(--pill); border-radius: 999px; padding: 8px 13px; font-size: 15px; line-height: 1; font-weight: 850; white-space: nowrap; }
-        .teams { min-height: 68px; font-size: 20px; line-height: 1.42; font-weight: 850; margin-bottom: 20px; }
-        .action { background: #f0f1f6; border-radius: 15px; padding: 16px 18px; color: var(--ink); font-size: 18px; line-height: 1.45; font-weight: 850; margin-bottom: 18px; }
-        .detail-list { display: grid; gap: 10px; margin: 0 0 18px; }
-        .detail-row { display: grid; grid-template-columns: 88px 1fr; gap: 12px; border-bottom: 1px solid #f0f1f5; padding: 0 0 10px; font-size: 15px; line-height: 1.55; font-weight: 760; }
-        .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .detail-row span:first-child { color: var(--muted); font-weight: 850; }
-        .detail-row span:last-child { color: var(--ink); }
-        .reason { color: var(--muted); font-size: 16px; line-height: 1.6; font-weight: 650; margin: 0; }
-        .spacer { flex: 1; }
-        .divider { border-top: 1px solid var(--line); margin: 28px 0 20px; }
-        .return-label { color: var(--muted); font-size: 16px; line-height: 1.3; font-weight: 800; margin-bottom: 10px; }
-        .return-amount { color: var(--accent); font-size: 35px; line-height: 1.1; font-weight: 900; }
-        .return-sub { color: var(--muted); font-size: 13px; line-height: 1.55; font-weight: 700; margin-top: 10px; }
-        .fine-print { color: #a0a3ad; font-size: 12px; line-height: 1.7; margin-top: 24px; text-align: center; }
-        @media (max-width: 1180px) {
-            .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-        @media (max-width: 720px) {
-            body { padding: 28px 16px 44px; }
-            .board { grid-template-columns: 1fr; gap: 18px; }
-        }
-    </style>
-</head>
-<body>
-<div class="page">
-    <section class="hero">
-        <div class="kicker">SPORTTERY SKILL V5 · AI 智能分析</div>
-        <div class="hero-title">每日体彩军师 AI 分析面板</div>
-        <p class="hero-copy">上方保留赛事口径和当天赛程；下方给出 AI 分析后的四套可执行方案。</p>
-        <div class="meta">北京时间：【填入具体日期时间】｜数据源：竞彩网官方 API｜业务日：【填入 businessDate】</div>
-        <div class="summary-grid">
-            <div class="summary-card"><b>【场次数】 场</b><span>当前可售赛事</span></div>
-            <div class="summary-card"><b>【M】 元</b><span>运作资金</span></div>
-            <div class="summary-card"><b>4 套</b><span>稳健 / 加仓 / 冷门 / 对冲</span></div>
-            <div class="summary-card"><b>【N】 场</b><span>深盘不买区</span></div>
-        </div>
-    </section>
+生成 HTML 时，必须使用以下模板结构：
 
-    <section class="overview">
-        <div class="overview-head">
-            <h2 class="overview-title">当前赛事情况</h2>
-            <p class="overview-note">从官方 API 实时抓取的可售赛事，以下方案均基于这些赛事进行 AI 分析。</p>
-        </div>
-        <div class="table-shell">
-            <table>
-                <thead>
-                    <tr>
-                        <th>编号</th>
-                        <th>开赛时间</th>
-                        <th>赛事</th>
-                        <th>对阵</th>
-                        <th>让球</th>
-                        <th>固定奖金（胜/平/负）</th>
-                        <th>可售玩法</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- AI 填入 API 返回的所有可售赛事 -->
-                </tbody>
-            </table>
-        </div>
-    </section>
+### 设计规范
 
-    <div class="board">
-        <article class="plan-card">
-            <div class="card-head">
-                <h1>稳健保底</h1>
-                <div class="tag">主票 【金额】元</div>
-            </div>
-            <div class="teams">【AI 填入对阵】</div>
-            <div class="action">✓ 【AI 填入买法】</div>
-            <div class="detail-list">
-                <!-- AI 填入详细信息 -->
-            </div>
-            <p class="reason">【AI 填入选择理由】</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">命中组合理论返还</div>
-            <div class="return-amount">【理论返还区间】</div>
-            <div class="return-sub">【各组合返还明细】</div>
-        </article>
+- 背景色：`#f2f4f8`（浅灰蓝）
+- 卡片色：`#ffffff`（白色）
+- 主文字：`#1a1d24`
+- 辅助文字：`#6b7280`
+- 金色点缀：`#d97706`
+- 方案色条：绿(`#16a34a`) / 橙(`#ea580c`) / 红(`#dc2626`) / 蓝(`#2563eb`)
 
-        <article class="plan-card value">
-            <div class="card-head">
-                <h1>价值发现</h1>
-                <div class="tag">可选加仓</div>
-            </div>
-            <div class="teams">【AI 填入对阵】</div>
-            <div class="action">✓ 【AI 填入买法】</div>
-            <div class="detail-list">
-                <!-- AI 填入详细信息 -->
-            </div>
-            <p class="reason">【AI 填入选择理由】</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">预计回款</div>
-            <div class="return-amount">【理论返还区间】</div>
-            <div class="return-sub">【各选项返还明细】</div>
-        </article>
+### 表格列结构
 
-        <article class="plan-card danger">
-            <div class="card-head">
-                <h1>高危搏杀</h1>
-                <div class="tag">比分冷门</div>
-            </div>
-            <div class="teams">【AI 填入对阵】</div>
-            <div class="action">✓ 【AI 填入买法】</div>
-            <div class="detail-list">
-                <!-- AI 填入详细信息 -->
-            </div>
-            <p class="reason">【AI 填入选择理由】</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">命中比分理论返还</div>
-            <div class="return-amount">【理论返还区间】</div>
-            <div class="return-sub">【各比分返还明细】</div>
-        </article>
-
-        <article class="plan-card matrix">
-            <div class="card-head">
-                <h1>矩阵对冲</h1>
-                <div class="tag">资金分配</div>
-            </div>
-            <div class="teams">系统自动拆分【M】元本金</div>
-            <div class="action">主票(【X】元) + 加仓(【Y】元) + 冷门(【Z】元)</div>
-            <div class="detail-list">
-                <div class="detail-row"><span>优先级</span><span>先买主票；想用满预算，再买加仓和冷门。</span></div>
-                <div class="detail-row"><span>不买</span><span>【AI 填入深盘赛事及原因】</span></div>
-                <div class="detail-row"><span>逻辑</span><span>【AI 填入整体逻辑】</span></div>
-                <div class="detail-row"><span>总额</span><span>【X】 + 【Y】 + 【Z】 = 【M】 元</span></div>
-            </div>
-            <p class="reason">【AI 填入对冲逻辑说明】</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">执行顺序</div>
-            <div class="return-amount">【X】 + 【Y】 + 【Z】 元</div>
-        </article>
-    </div>
-    <p class="fine-print">北京时间：【具体时间】｜业务日：【businessDate】｜数据源：竞彩网官方 API｜本页由 AI 实时分析生成，不构成投注建议。</p>
-</div>
-</body>
-</html>
 ```
+| 时间/小组/赛事 | 对阵 | 胜平负(赔率) | 让球 | 让球胜平负(赔率) | 总进球(最可能3个) | 可售玩法 |
+```
+
+- 前两列居左
+- 其余列居中
+- 表头下方加「赔率」小字标注（10px, #9ca3af）
+- 总进球列只展示赔率最低的 3 个（绿色加粗）
+
+### 赛事标题
+
+来自小红书世界杯频道，如：
+- 德国 VS 库拉索 → 「德国战车首秀」
+- 荷兰 VS 日本 → 「蓝武士首战荷兰」
+- 科特迪瓦 VS 厄瓜多尔 → 「非洲大象首秀」
+- 瑞典 VS 突尼斯 → 「伊萨克携手哲凯赖什」
+
+### 方案卡片结构
+
+每张卡片包含：
+1. 顶部色条（4px）
+2. 卡片标题 + 标签
+3. 对阵信息
+4. 行动区域（淡色背景）
+5. 详情列表（含 AI 购买建议）
+6. 理由说明
+7. 返回金额（居中大字）
+
+### AI 购买建议标签
+
+- 【必买】— 核心方案，必须执行
+- 【可选】— 预算允许再买
+- 【可不买】— 概率低，不中属正常
+- 【按序执行】— 按优先级执行
 
 ---
 
