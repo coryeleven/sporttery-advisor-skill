@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>竞彩观察 Skill V4 简化买法</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --ink: #202124;
+            --muted: #999ca6;
+            --pill: #f1f2f7;
+            --line: #eceef3;
+            --green: #34c759;
+            --orange: #ff9500;
+            --red: #ff3b30;
+            --blue: #007aff;
+            --shadow: 0 22px 48px rgba(40, 52, 72, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            margin: 0;
+            padding: 72px 56px;
+            letter-spacing: 0;
+        }
+        .page {
+            max-width: 1840px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .hero {
+            text-align: center;
+            margin: 0 auto 36px;
+            max-width: 1180px;
+        }
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            color: #2c7a54;
+            background: rgba(52, 199, 89, 0.09);
+            border: 1px solid rgba(52, 199, 89, 0.18);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 850;
+            margin-bottom: 16px;
+        }
+        .hero-title {
+            font-size: clamp(34px, 5vw, 58px);
+            line-height: 1.04;
+            font-weight: 900;
+            margin: 0;
+        }
+        .hero-copy {
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.68;
+            margin: 16px auto 0;
+            max-width: 760px;
+            font-weight: 650;
+        }
+        .meta {
+            color: #9b9faa;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 14px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin: 28px auto 0;
+        }
+        .summary-card {
+            background: rgba(255, 255, 255, 0.86);
+            border: 1px solid #e8ebf1;
+            border-radius: 16px;
+            padding: 16px 18px;
+            text-align: left;
+            box-shadow: 0 12px 34px rgba(40, 52, 72, 0.045);
+        }
+        .summary-card b {
+            display: block;
+            font-size: 24px;
+            line-height: 1.1;
+            font-weight: 900;
+        }
+        .summary-card span {
+            color: var(--muted);
+            display: block;
+            font-size: 12px;
+            line-height: 1.45;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+        .overview {
+            margin: 0 0 34px;
+        }
+        .overview-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 14px;
+        }
+        .overview-title {
+            font-size: 24px;
+            line-height: 1.2;
+            font-weight: 900;
+            margin: 0;
+        }
+        .overview-note {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 0;
+            max-width: 660px;
+            font-weight: 650;
+        }
+        .table-shell {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e8ebf1;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: auto;
+        }
+        table {
+            width: 100%;
+            min-width: 920px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid var(--line);
+            padding: 16px 18px;
+            font-size: 13px;
+            line-height: 1.55;
+            text-align: left;
+            font-weight: 700;
+        }
+        th {
+            color: #858a96;
+            background: #fafbfe;
+            font-weight: 850;
+        }
+        tr:last-child td { border-bottom: none; }
+        td:first-child, td:nth-child(4) {
+            color: var(--ink);
+            font-weight: 900;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+        .plan-card {
+            --accent: var(--green);
+            min-height: 405px;
+            background: var(--card);
+            border: 1px solid #e8ebf1;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-card.value { --accent: var(--orange); }
+        .plan-card.danger { --accent: var(--red); }
+        .plan-card.matrix { --accent: var(--blue); }
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            color: var(--accent);
+            font-size: 24px;
+            line-height: 1.18;
+            margin: 0;
+            font-weight: 850;
+        }
+        .tag {
+            color: #8f929c;
+            background: var(--pill);
+            border-radius: 999px;
+            padding: 8px 13px;
+            font-size: 15px;
+            line-height: 1;
+            font-weight: 850;
+            white-space: nowrap;
+        }
+        .teams {
+            min-height: 68px;
+            font-size: 20px;
+            line-height: 1.42;
+            font-weight: 850;
+            margin-bottom: 20px;
+        }
+        .action {
+            background: #f0f1f6;
+            border-radius: 15px;
+            padding: 16px 18px;
+            color: var(--ink);
+            font-size: 18px;
+            line-height: 1.45;
+            font-weight: 850;
+            margin-bottom: 18px;
+        }
+        .detail-list {
+            display: grid;
+            gap: 10px;
+            margin: 0 0 18px;
+        }
+        .detail-row {
+            display: grid;
+            grid-template-columns: 88px 1fr;
+            gap: 12px;
+            border-bottom: 1px solid #f0f1f5;
+            padding: 0 0 10px;
+            font-size: 15px;
+            line-height: 1.55;
+            font-weight: 760;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .detail-row span:first-child {
+            color: var(--muted);
+            font-weight: 850;
+        }
+        .detail-row span:last-child {
+            color: var(--ink);
+        }
+        .reason {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: 650;
+            margin: 0;
+        }
+        .spacer { flex: 1; }
+        .divider {
+            border-top: 1px solid var(--line);
+            margin: 28px 0 20px;
+        }
+        .return-label {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.3;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .return-amount {
+            color: var(--accent);
+            font-size: 35px;
+            line-height: 1.1;
+            font-weight: 900;
+        }
+        .return-sub {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .fine-print {
+            color: #a0a3ad;
+            font-size: 12px;
+            line-height: 1.7;
+            margin-top: 24px;
+            text-align: center;
+        }
+        @media (max-width: 1180px) {
+            .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 720px) {
+            body { padding: 28px 16px 44px; }
+            .board { grid-template-columns: 1fr; gap: 18px; }
+            .overview-head { display: block; }
+            .overview-title { margin-bottom: 8px; }
+            .table-shell { overflow: visible; }
+            table { min-width: 0; }
+            thead { display: none; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            tr { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+            tr:last-child { border-bottom: none; }
+            td {
+                border-bottom: none;
+                padding: 6px 0;
+                display: grid;
+                grid-template-columns: 106px 1fr;
+                gap: 12px;
+            }
+            td::before {
+                color: var(--muted);
+                font-size: 12px;
+                font-weight: 850;
+            }
+            td:nth-child(1)::before { content: "编号"; }
+            td:nth-child(2)::before { content: "时间"; }
+            td:nth-child(3)::before { content: "赛事"; }
+            td:nth-child(4)::before { content: "对阵"; }
+            td:nth-child(5)::before { content: "让球"; }
+            td:nth-child(6)::before { content: "可售玩法"; }
+            .plan-card { min-height: auto; padding: 24px; border-radius: 20px; }
+            .card-head { margin-bottom: 22px; }
+            h1 { font-size: 24px; }
+            .teams { min-height: auto; font-size: 20px; }
+            .detail-row { grid-template-columns: 78px 1fr; }
+            .return-amount { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <section class="hero">
+        <div class="kicker">SPORTTERY SKILL V4 · 北京时间赛事观察</div>
+        <div class="hero-title">竞彩观察 Skill V4 简化买法</div>
+        <p class="hero-copy">上半部分保留赛事口径和当天赛程；下半部分只给可执行的三张票和一张资金矩阵，减少选择负担。</p>
+        <div class="meta">抓取时间：2026/6/14 17:58:10｜官方接口：竞彩网 getMatchCalculatorV1｜赛事业务日：2026-06-14</div>
+        <div class="summary-grid">
+            <div class="summary-card"><b>4 场</b><span>当前业务日可售世界杯赛事</span></div>
+            <div class="summary-card"><b>50 元</b><span>全部执行模拟预算</span></div>
+            <div class="summary-card"><b>3 张</b><span>主票、加仓、冷门</span></div>
+            <div class="summary-card"><b>1 场</b><span>深盘赛事进入不买区</span></div>
+        </div>
+    </section>
+
+    <section class="overview">
+        <div class="overview-head">
+            <h2 class="overview-title">当前赛事情况</h2>
+            <p class="overview-note">先把当天可售比赛、让球和可售玩法摆出来；下面的方案只从这些比赛里筛选，不再把每场都塞进买法。</p>
+        </div>
+        <div class="table-shell">
+            <table>
+                <thead>
+                    <tr>
+                        <th>赛事编号</th>
+                        <th>开赛北京时间</th>
+                        <th>赛事</th>
+                        <th>对阵</th>
+                        <th>让球</th>
+                        <th>官方可售玩法</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>周日009</td>
+                        <td>2026-06-15 01:00</td>
+                        <td>世界杯</td>
+                        <td>德国 VS 库拉索</td>
+                        <td>-3</td>
+                        <td>让球胜平负、总进球数、猜比分</td>
+                    </tr>
+                    <tr>
+                        <td>周日010</td>
+                        <td>2026-06-15 04:00</td>
+                        <td>世界杯</td>
+                        <td>荷兰 VS 日本</td>
+                        <td>-1</td>
+                        <td>胜平负、让球胜平负、总进球数、猜比分、半全场</td>
+                    </tr>
+                    <tr>
+                        <td>周日011</td>
+                        <td>2026-06-15 07:00</td>
+                        <td>世界杯</td>
+                        <td>科特迪瓦 VS 厄瓜多尔</td>
+                        <td>+1</td>
+                        <td>胜平负、让球胜平负、总进球数、猜比分、半全场</td>
+                    </tr>
+                    <tr>
+                        <td>周日012</td>
+                        <td>2026-06-15 10:00</td>
+                        <td>世界杯</td>
+                        <td>瑞典 VS 突尼斯</td>
+                        <td>-1</td>
+                        <td>胜平负、让球胜平负、总进球数、猜比分、半全场</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="board">
+        <article class="plan-card">
+            <div class="card-head">
+                <h1>稳健保底</h1>
+                <div class="tag">主票 32元</div>
+            </div>
+            <div class="teams">科特迪瓦 vs 厄瓜多尔<br>荷兰 vs 日本</div>
+            <div class="action">✓ 2串1复式：科特迪瓦(+1)让胜/让平 + 荷兰(-1)让平/让负</div>
+            <div class="detail-list">
+                <div class="detail-row"><span>第一关</span><span>周日011 科特迪瓦 VS 厄瓜多尔｜让球 +1｜勾选：让胜、让平</span></div><div class="detail-row"><span>第二关</span><span>周日010 荷兰 VS 日本｜让球 -1｜勾选：让平、让负</span></div><div class="detail-row"><span>买法</span><span>让球胜平负 2串1复式｜4 倍｜金额 32 元</span></div><div class="detail-row"><span>条件</span><span>两场都命中所选让球结果才返还；错一场则主票不中。</span></div>
+            </div>
+            <p class="reason">依据：前几场热门连续受阻，主票不押胜负正路，专门覆盖受让保护和热门只小胜/不胜。</p>
+            <div class="spacer"></div>
+            <div class="divider"></div>
+            <div class="return-label">命中组合理论返还</div>
+            <div class="return-amount">20.34 - 102.12 元</div>
+            <div class="return-sub">四种命中组合分别约为：让胜 × 让平：40.57 元｜让胜 × 让负：20.34 元｜让平 × 让平：102.12 元｜让平 × 让负：51.21 元</div>
+        </article>
+
+        <article class="plan-card value">
+            <div class="card-head">
+                <h1>价值发现</h1>
+                <div class="tag">防冷加仓</div>
+            </div>
+            <div class="teams">瑞典 vs 突尼斯</div>
+            <div class="action">✓ 单场：瑞典(-1)让平/让负</div>
+            <div class="detail-list">
+                <div class="detail-row"><span>赛事</span><span>周日012 瑞典 VS 突尼斯｜让球 -1</span></div><div class="detail-row"><span>选择</span><span>勾选：让平、让负；覆盖热门只赢 1 球、打平或冷门方向。</span></div><div class="detail-row"><span>买法</span><span>让球胜平负 单场复式｜3 倍｜金额 12 元</span></div><div class="detail-row"><span>提醒</span><span>如果实际出票页不支持单关，这一张直接跳过。</span></div>
+            </div>
+            <p class="reason">依据：热门方有优势，但小组赛早段容易出现一球小胜、让球不穿或平局，加仓只做可选。</p>
+            <div class="spacer"></div>
+            <div class="divider"></div>
+            <div class="return-label">预计回款</div>
+            <div class="return-amount">11.40 - 19.44 元</div>
+            <div class="return-sub">让平：19.44 元｜让负：11.40 元</div>
+        </article>
+
+        <article class="plan-card danger">
+            <div class="card-head">
+                <h1>高危搏杀</h1>
+                <div class="tag">比分冷门</div>
+            </div>
+            <div class="teams">瑞典 vs 突尼斯</div>
+            <div class="action">✓ 猜比分：1:1（6元）</div>
+            <div class="detail-list">
+                <div class="detail-row"><span>赛事</span><span>周日012 瑞典 VS 突尼斯</span></div><div class="detail-row"><span>选择</span><span>猜比分：1:1</span></div><div class="detail-row"><span>买法</span><span>比分单挑｜3 倍｜金额 6 元</span></div><div class="detail-row"><span>边界</span><span>这张只占小额冷门仓，不因为赔率高而加码。</span></div>
+            </div>
+            <p class="reason">依据：1:1 是热门不穿盘里最典型的冷门比分，只用小额覆盖，不追加本金。</p>
+            <div class="spacer"></div>
+            <div class="divider"></div>
+            <div class="return-label">命中比分理论返还</div>
+            <div class="return-amount">33 元</div>
+            <div class="return-sub">1:1：33.00 元</div>
+        </article>
+
+        <article class="plan-card matrix">
+            <div class="card-head">
+                <h1>矩阵对冲</h1>
+                <div class="tag">资金分配</div>
+            </div>
+            <div class="teams">系统自动拆分 50 元本金</div>
+            <div class="action">主票(32) + 加仓(12) + 冷门(6)</div>
+            <div class="detail-list">
+                <div class="detail-row"><span>优先级</span><span>先买主票 32 元；想用满预算，再买加仓 12 元和冷门 6 元。</span></div>
+                <div class="detail-row"><span>不买</span><span>德国 VS 库拉索｜-3 深盘，赢球但不穿盘的区间太宽。</span></div>
+                <div class="detail-row"><span>逻辑</span><span>不追热门大胜；主线押让球保护，小额覆盖冷门比分。</span></div>
+                <div class="detail-row"><span>总额</span><span>32 + 12 + 6 = 50 元，全部为 2 元倍数。</span></div>
+            </div>
+            <p class="reason">依据：先买主票，想用满预算再补后两张；德国 vs 库拉索 -3 深盘 放入不买区，避免深盘误伤。</p>
+            <div class="spacer"></div>
+            <div class="divider"></div>
+            <div class="return-label">执行顺序</div>
+            <div class="return-amount">32 + 12 + 6 元</div>
+        </article>
+    </div>
+    <p class="fine-print">抓取时间：2026/6/14 17:58:10｜赛事业务日：2026-06-14｜本页是规则调试与赛前观察演示，不构成投注建议。</p>
+</div>
+</body>
+</html>

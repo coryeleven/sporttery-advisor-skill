@@ -1,0 +1,8 @@
+# OS files
+.DS_Store
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
