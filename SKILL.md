@@ -73,6 +73,18 @@ https://webapi.sporttery.cn/gateway/uniform/football/getMatchCalculatorV1.qry?ch
 预算 M = 50。请按"每日体彩军师"Skill 执行，抓取官方 API 赛事数据，进行 AI 分析后生成四套方案。
 ```
 
+指定日期输入：
+
+```text
+预算 M = 50。分析 6 月 16 号的赛事。
+```
+
+```text
+预算 M = 50。分析明天的比赛。
+```
+
+未指定日期时，默认分析最近可买的赛事（API 返回的第一个业务日）。
+
 ---
 
 ## 最高优先级规则
@@ -141,9 +153,49 @@ https://webapi.sporttery.cn/gateway/uniform/football/getMatchCalculatorV1.qry?ch
 
 ---
 
-### 4. 北京时间锚定
+### 4. 时间与日期规则
 
-所有"今日 / 明日 / 当前时间"必须以北京时间 UTC+8 为准。
+#### 4.1 北京时间锚定
+
+所有时间必须以北京时间 UTC+8 为准。
+
+#### 4.2 API 返回结构
+
+API 返回 `matchInfoList` 数组，包含多个业务日的数据：
+
+```json
+{
+  "value": {
+    "matchInfoList": [
+      { "businessDate": "2026-06-14", "subMatchList": [...] },
+      { "businessDate": "2026-06-15", "subMatchList": [...] },
+      { "businessDate": "2026-06-16", "subMatchList": [...] },
+      { "businessDate": "2026-06-17", "subMatchList": [...] }
+    ]
+  }
+}
+```
+
+- `businessDate`：业务日（可投注日期）
+- `matchDate`：赛事实际开赛日期
+- 业务日与赛事日期的关系：**业务日 N 买赛事日期 N+1 的票**
+
+#### 4.3 日期筛选规则
+
+用户可以指定分析某一天的赛事：
+
+- 用户说「分析 6 月 16 号的赛事」→ 筛选 `matchDate = "2026-06-16"` 的场次
+- 用户说「分析明天的赛事」→ 计算明天的日期，筛选对应 `matchDate`
+- 用户未指定日期 → 默认分析**第一个业务日**的赛事（即最近可买的比赛）
+
+#### 4.4 输出时间展示
+
+HTML 中必须展示：
+
+- **抓取时间**：当前北京时间（如 `2026-06-14 18:43:23`）
+- **业务日**：API 返回的 `businessDate`
+- **赛事日期**：实际开赛日期（`matchDate`）
+- **编号前缀**：来自 API 的 `matchNumStr`（如「周日009」），原样展示
 
 ---
 
