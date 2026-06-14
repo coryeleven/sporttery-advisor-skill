@@ -72,8 +72,8 @@
             box-shadow: var(--shadow);
         }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 16px 18px; font-size: 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-        th { color: var(--muted); background: #f9fafb; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
+        th, td { padding: 18px 20px; font-size: 14px; border-bottom: 1px solid var(--line); vertical-align: middle; line-height: 1.6; }
+        th { color: var(--muted); background: #f9fafb; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: #f9fafb; }
         td.col-left { text-align: left; }
@@ -101,36 +101,61 @@
         .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
         .plan-card {
             --accent: var(--green);
+            --accent-bg: #f0fdf4;
             background: var(--card);
             border: 1px solid var(--line);
             border-radius: 20px;
-            padding: 28px;
+            padding: 0;
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
-            min-height: 480px;
+            min-height: 520px;
             transition: all 0.2s ease;
+            overflow: hidden;
         }
         .plan-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.06); transform: translateY(-2px); }
-        .plan-card.value { --accent: var(--orange); }
-        .plan-card.danger { --accent: var(--red); }
-        .plan-card.matrix { --accent: var(--blue); }
+        .plan-card.value { --accent: var(--orange); --accent-bg: #fff7ed; }
+        .plan-card.danger { --accent: var(--red); --accent-bg: #fef2f2; }
+        .plan-card.matrix { --accent: var(--blue); --accent-bg: #eff6ff; }
 
-        .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-        .card-head h1 { color: var(--accent); font-size: 22px; font-weight: 800; }
-        .tag { color: var(--muted); background: var(--pill); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; }
-        .teams { font-size: 18px; font-weight: 800; line-height: 1.5; margin-bottom: 20px; min-height: 60px; }
-        .action { background: #f9fafb; border-radius: 12px; padding: 16px; font-size: 15px; font-weight: 700; margin-bottom: 20px; border: 1px solid var(--line); }
-        .detail-list { display: grid; gap: 12px; margin-bottom: 20px; }
-        .detail-row { display: grid; grid-template-columns: 80px 1fr; gap: 16px; font-size: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-        .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-        .detail-row span:first-child { color: var(--muted); font-weight: 700; }
-        .reason { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+        .card-accent { height: 4px; background: var(--accent); }
+        .card-body { padding: 28px; display: flex; flex-direction: column; flex: 1; }
+
+        .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .card-head h1 { color: var(--accent); font-size: 22px; font-weight: 800; margin: 0; }
+        .tag { color: var(--muted); background: var(--pill); border-radius: 999px; padding: 6px 14px; font-size: 12px; font-weight: 700; }
+        .teams { font-size: 17px; font-weight: 800; line-height: 1.5; margin-bottom: 16px; color: var(--ink); }
+        .action {
+            background: var(--accent-bg);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            border: 1px solid rgba(0,0,0,0.04);
+            color: var(--ink);
+            line-height: 1.5;
+        }
+        .detail-list { display: grid; gap: 0; margin-bottom: 16px; }
+        .detail-row {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 12px;
+            font-size: 13px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            align-items: start;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row span:first-child { color: var(--muted); font-weight: 700; font-size: 12px; }
+        .detail-row span:last-child { line-height: 1.5; }
+        .reason { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0; }
         .spacer { flex: 1; }
-        .divider { border-top: 1px solid var(--line); margin: 24px 0 16px; }
-        .return-label { color: var(--muted); font-size: 14px; font-weight: 700; margin-bottom: 8px; }
-        .return-amount { color: var(--accent); font-size: 32px; font-weight: 900; }
-        .return-sub { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 10px; font-weight: 600; }
+        .divider { border-top: 1px solid var(--line); margin: 16px 0 12px; }
+        .return-section { text-align: center; padding-top: 8px; }
+        .return-label { color: var(--muted); font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+        .return-amount { color: var(--accent); font-size: 28px; font-weight: 900; line-height: 1.2; }
+        .return-sub { color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 8px; font-weight: 600; }
 
         .fine-print { color: #9ca3af; font-size: 12px; text-align: center; margin-top: 48px; line-height: 1.8; }
 
@@ -171,10 +196,11 @@
                     <tr>
                         <th style="text-align:left">时间 / 小组 / 赛事</th>
                         <th style="text-align:left">对阵</th>
-                        <th>胜平负 胜 / 平 / 负</th>
+                        <th>胜平负 胜 / 平 / 负<br><span style="font-size:10px;font-weight:600;color:#9ca3af">赔率</span></th>
                         <th style="color:#334155;font-weight:800">让球</th>
-                        <th style="color:#334155;font-weight:800">让球胜平负 胜 / 平 / 负</th>
-                        <th style="text-align:right">可售玩法</th>
+                        <th style="color:#334155;font-weight:800">让球胜平负 胜 / 平 / 负<br><span style="font-size:10px;font-weight:600;color:#9ca3af">赔率</span></th>
+                        <th style="font-size:11px">总进球<br>最可能3个<br><span style="font-size:10px;font-weight:600;color:#9ca3af">赔率</span></th>
+                        <th>可售玩法</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,7 +216,12 @@
                         <td class="col-center odds-na">未开售</td>
                         <td class="col-center">-3</td>
                         <td class="col-center odds">1.70 / 4.80 / 3.00</td>
-                        <td class="col-right">
+                        <td class="col-center" style="font-size:12px;line-height:1.6">
+                            <span style="color:#16a34a;font-weight:700">3球:4.75</span><br>
+                            <span style="color:#16a34a;font-weight:700">4球:4.00</span><br>
+                            <span style="color:#16a34a;font-weight:700">7+:4.65</span>
+                        </td>
+                        <td class="col-center">
                             <span class="play-tag main">让球胜平负</span>
                             <span class="play-tag main">猜比分</span>
                             <span class="play-tag sub">总进球</span>
@@ -208,7 +239,12 @@
                         <td class="col-center odds">1.83 / 3.43 / 3.43</td>
                         <td class="col-center">-1</td>
                         <td class="col-center odds">3.82 / 3.45 / 1.73</td>
-                        <td class="col-right">
+                        <td class="col-center" style="font-size:12px;line-height:1.6">
+                            <span style="color:#16a34a;font-weight:700">2球:3.15</span><br>
+                            <span style="color:#16a34a;font-weight:700">3球:3.30</span><br>
+                            <span style="color:#16a34a;font-weight:700">1球:4.50</span>
+                        </td>
+                        <td class="col-center">
                             <span class="play-tag main">胜平负</span>
                             <span class="play-tag main">让球胜平负</span>
                             <span class="play-tag main">猜比分</span>
@@ -227,7 +263,12 @@
                         <td class="col-center odds">3.15 / 2.65 / 2.30</td>
                         <td class="col-center">+1</td>
                         <td class="col-center odds">1.47 / 3.70 / 5.60</td>
-                        <td class="col-right">
+                        <td class="col-center" style="font-size:12px;line-height:1.6">
+                            <span style="color:#16a34a;font-weight:700">2球:2.90</span><br>
+                            <span style="color:#16a34a;font-weight:700">1球:3.30</span><br>
+                            <span style="color:#16a34a;font-weight:700">3球:4.35</span>
+                        </td>
+                        <td class="col-center">
                             <span class="play-tag main">胜平负</span>
                             <span class="play-tag main">让球胜平负</span>
                             <span class="play-tag main">猜比分</span>
@@ -246,7 +287,12 @@
                         <td class="col-center odds">1.71 / 3.25 / 4.22</td>
                         <td class="col-center">-1</td>
                         <td class="col-center odds">3.40 / 3.24 / 1.90</td>
-                        <td class="col-right">
+                        <td class="col-center" style="font-size:12px;line-height:1.6">
+                            <span style="color:#16a34a;font-weight:700">2球:2.90</span><br>
+                            <span style="color:#16a34a;font-weight:700">1球:4.10</span><br>
+                            <span style="color:#16a34a;font-weight:700">3球:3.60</span>
+                        </td>
+                        <td class="col-center">
                             <span class="play-tag main">胜平负</span>
                             <span class="play-tag main">让球胜平负</span>
                             <span class="play-tag main">猜比分</span>
@@ -260,90 +306,110 @@
 
     <div class="board">
         <article class="plan-card">
-            <div class="card-head">
-                <h1>稳健保底</h1>
-                <div class="tag">主票 32元</div>
+            <div class="card-accent"></div>
+            <div class="card-body">
+                <div class="card-head">
+                    <h1>稳健保底</h1>
+                    <div class="tag">主票 32元</div>
+                </div>
+                <div class="teams">🇳🇱 荷兰 VS 日本 🇯🇵<br>🇨🇮 科特迪瓦 VS 厄瓜多尔 🇪🇨</div>
+                <div class="action">✓ 让球胜平负 2串1复式：荷兰让1球 平/负 + 科特迪瓦受让1球 胜/平</div>
+                <div class="detail-list">
+                    <div class="detail-row"><span>第一关</span><span>荷兰 VS 日本｜让球 -1｜HHAD 勾选：让平(3.45)、让负(1.73)</span></div>
+                    <div class="detail-row"><span>第二关</span><span>科特迪瓦 VS 厄瓜多尔｜让球 +1｜HHAD 勾选：让胜(1.47)、让平(3.70)</span></div>
+                    <div class="detail-row"><span>买法</span><span>让球胜平负 2串1复式｜4倍｜32 元</span></div>
+                    <div class="detail-row"><span>条件</span><span>两场都命中才返还；错一场不中。</span></div>
+                    <div class="detail-row"><span>建议</span><span style="color:#16a34a;font-weight:700">【必买】两场均为小组赛首轮，热门穿盘率低，让球保护方向明确。</span></div>
+                </div>
+                <p class="reason">荷兰让1球但日本防守严密，穿盘概率不高；科特迪瓦受让1球主场优势明显。</p>
+                <div class="spacer"></div>
+                <div class="divider"></div>
+                <div class="return-section">
+                    <div class="return-label">命中组合理论返还</div>
+                    <div class="return-amount">163.30 - 407.52 元</div>
+                    <div class="return-sub">让平×让胜：163.30 ｜ 让平×让平：407.52 ｜ 让负×让胜：81.52 ｜ 让负×让平：204.35</div>
+                </div>
             </div>
-            <div class="teams">🇳🇱 荷兰 VS 日本 🇯🇵<br>🇨🇮 科特迪瓦 VS 厄瓜多尔 🇪🇨</div>
-            <div class="action">✓ 让球胜平负 2串1复式：荷兰让1球 平/负 + 科特迪瓦受让1球 胜/平</div>
-            <div class="detail-list">
-                <div class="detail-row"><span>第一关</span><span>荷兰 VS 日本｜让球 -1｜HHAD 勾选：让平(3.45)、让负(1.73)</span></div>
-                <div class="detail-row"><span>第二关</span><span>科特迪瓦 VS 厄瓜多尔｜让球 +1｜HHAD 勾选：让胜(1.47)、让平(3.70)</span></div>
-                <div class="detail-row"><span>买法</span><span>让球胜平负 2串1复式｜4倍｜32 元</span></div>
-                <div class="detail-row"><span>条件</span><span>两场都命中才返还；错一场不中。</span></div>
-                <div class="detail-row"><span>建议</span><span style="color:#16a34a;font-weight:700">【必买】两场均为小组赛首轮，热门穿盘率低，让球保护方向明确。</span></div>
-            </div>
-            <p class="reason">荷兰让1球但日本防守严密，穿盘概率不高；科特迪瓦受让1球主场优势明显。两场均为小组赛首轮，热门穿盘率偏低。</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">命中组合理论返还</div>
-            <div class="return-amount">163.30 - 407.52 元</div>
-            <div class="return-sub">让平×让胜：163.30 ｜ 让平×让平：407.52 ｜ 让负×让胜：81.52 ｜ 让负×让平：204.35</div>
         </article>
 
         <article class="plan-card value">
-            <div class="card-head">
-                <h1>价值发现</h1>
-                <div class="tag">可选加仓</div>
+            <div class="card-accent"></div>
+            <div class="card-body">
+                <div class="card-head">
+                    <h1>价值发现</h1>
+                    <div class="tag">可选加仓</div>
+                </div>
+                <div class="teams">🇸🇪 瑞典 VS 突尼斯 🇹🇳</div>
+                <div class="action">✓ 让球胜平负 单关：瑞典让1球 胜/平</div>
+                <div class="detail-list">
+                    <div class="detail-row"><span>赛事</span><span>瑞典 VS 突尼斯｜让球 -1</span></div>
+                    <div class="detail-row"><span>选择</span><span>HHAD 勾选：让胜(3.40)、让平(3.24)</span></div>
+                    <div class="detail-row"><span>买法</span><span>让球胜平负 单关复式｜3倍｜12 元</span></div>
+                    <div class="detail-row"><span>提醒</span><span>出票页不支持单关则跳过</span></div>
+                    <div class="detail-row"><span>建议</span><span style="color:#ea580c;font-weight:700">【可选】预算允许再买，出票页不支持单关则直接跳过。</span></div>
+                </div>
+                <p class="reason">瑞典让1球，突尼斯防守不弱但进攻乏力。让胜3.40存在价值。</p>
+                <div class="spacer"></div>
+                <div class="divider"></div>
+                <div class="return-section">
+                    <div class="return-label">预计回款</div>
+                    <div class="return-amount">38.88 - 40.80 元</div>
+                    <div class="return-sub">让胜：40.80 ｜ 让平：38.88</div>
+                </div>
             </div>
-            <div class="teams">🇸🇪 瑞典 VS 突尼斯 🇹🇳</div>
-            <div class="action">✓ 让球胜平负 单关：瑞典让1球 胜/平</div>
-            <div class="detail-list">
-                <div class="detail-row"><span>赛事</span><span>瑞典 VS 突尼斯｜让球 -1</span></div>
-                <div class="detail-row"><span>选择</span><span>HHAD 勾选：让胜(3.40)、让平(3.24)</span></div>
-                <div class="detail-row"><span>买法</span><span>让球胜平负 单关复式｜3倍｜12 元</span></div>
-                <div class="detail-row"><span>提醒</span><span>出票页不支持单关则跳过</span></div>
-                <div class="detail-row"><span>建议</span><span style="color:#ea580c;font-weight:700">【可选】预算允许再买，出票页不支持单关则直接跳过。</span></div>
-            </div>
-            <p class="reason">瑞典让1球，突尼斯防守不弱但进攻乏力。让胜3.40存在价值，覆盖穿盘或小胜。</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">预计回款</div>
-            <div class="return-amount">38.88 - 40.80 元</div>
-            <div class="return-sub">让胜：40.80 ｜ 让平：38.88</div>
         </article>
 
         <article class="plan-card danger">
-            <div class="card-head">
-                <h1>高危搏杀</h1>
-                <div class="tag">比分冷门</div>
+            <div class="card-accent"></div>
+            <div class="card-body">
+                <div class="card-head">
+                    <h1>高危搏杀</h1>
+                    <div class="tag">比分冷门</div>
+                </div>
+                <div class="teams">🇳🇱 荷兰 VS 日本 🇯🇵</div>
+                <div class="action">✓ 猜比分：1:1（6元）</div>
+                <div class="detail-list">
+                    <div class="detail-row"><span>赛事</span><span>荷兰 VS 日本</span></div>
+                    <div class="detail-row"><span>选择</span><span>CRS 猜比分：1:1</span></div>
+                    <div class="detail-row"><span>买法</span><span>比分单挑｜3倍｜6 元</span></div>
+                    <div class="detail-row"><span>边界</span><span>小额冷门仓，不追加本金</span></div>
+                    <div class="detail-row"><span>建议</span><span style="color:#dc2626;font-weight:700">【可不买】比分猜中概率极低，仅6元覆盖冷门，不中属正常。</span></div>
+                </div>
+                <p class="reason">荷兰进攻效率不稳，日本防守严密。1:1是热门不穿盘的典型冷门比分。</p>
+                <div class="spacer"></div>
+                <div class="divider"></div>
+                <div class="return-section">
+                    <div class="return-label">命中比分理论返还</div>
+                    <div class="return-amount">约 102 - 150 元</div>
+                    <div class="return-sub">1:1 比分赔率约 17-25（以实际出票为准）</div>
+                </div>
             </div>
-            <div class="teams">🇳🇱 荷兰 VS 日本 🇯🇵</div>
-            <div class="action">✓ 猜比分：1:1（6元）</div>
-            <div class="detail-list">
-                <div class="detail-row"><span>赛事</span><span>荷兰 VS 日本</span></div>
-                <div class="detail-row"><span>选择</span><span>CRS 猜比分：1:1</span></div>
-                <div class="detail-row"><span>买法</span><span>比分单挑｜3倍｜6 元</span></div>
-                <div class="detail-row"><span>边界</span><span>小额冷门仓，不追加本金</span></div>
-                <div class="detail-row"><span>建议</span><span style="color:#dc2626;font-weight:700">【可不买】比分猜中概率极低，仅6元覆盖冷门，不中属正常。</span></div>
-            </div>
-            <p class="reason">荷兰进攻效率不稳，日本防守严密。1:1是热门不穿盘的典型冷门比分。</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">命中比分理论返还</div>
-            <div class="return-amount">约 102 - 150 元</div>
-            <div class="return-sub">1:1 比分赔率约 17-25（以实际出票为准）</div>
         </article>
 
         <article class="plan-card matrix">
-            <div class="card-head">
-                <h1>矩阵对冲</h1>
-                <div class="tag">资金分配</div>
+            <div class="card-accent"></div>
+            <div class="card-body">
+                <div class="card-head">
+                    <h1>矩阵对冲</h1>
+                    <div class="tag">资金分配</div>
+                </div>
+                <div class="teams">系统拆分 50 元本金</div>
+                <div class="action">主票(32) + 加仓(12) + 冷门(6) = 50元</div>
+                <div class="detail-list">
+                    <div class="detail-row"><span>优先级</span><span>先买主票32元；用满预算再补后两张</span></div>
+                    <div class="detail-row"><span>不买</span><span>德国 VS 库拉索｜-3深盘，穿盘区间太宽</span></div>
+                    <div class="detail-row"><span>逻辑</span><span>不追热门大胜；主线押让球保护</span></div>
+                    <div class="detail-row"><span>总额</span><span>32 + 12 + 6 = 50 元，全部2元倍数</span></div>
+                    <div class="detail-row"><span>建议</span><span style="color:#2563eb;font-weight:700">【按序执行】先主票，有余力再补加仓和冷门，资金分配合理。</span></div>
+                </div>
+                <p class="reason">先买主票覆盖荷兰+科特迪瓦让球方向；加仓覆盖瑞典穿盘；冷门用1:1覆盖荷兰不穿盘。</p>
+                <div class="spacer"></div>
+                <div class="divider"></div>
+                <div class="return-section">
+                    <div class="return-label">执行顺序</div>
+                    <div class="return-amount">32 → 12 → 6</div>
+                </div>
             </div>
-            <div class="teams">系统拆分 50 元本金</div>
-            <div class="action">主票(32) + 加仓(12) + 冷门(6) = 50元</div>
-            <div class="detail-list">
-                <div class="detail-row"><span>优先级</span><span>先买主票32元；用满预算再补后两张</span></div>
-                <div class="detail-row"><span>不买</span><span>德国 VS 库拉索｜-3深盘，穿盘区间太宽</span></div>
-                <div class="detail-row"><span>逻辑</span><span>不追热门大胜；主线押让球保护</span></div>
-                <div class="detail-row"><span>总额</span><span>32 + 12 + 6 = 50 元，全部2元倍数</span></div>
-                <div class="detail-row"><span>建议</span><span style="color:#2563eb;font-weight:700">【按序执行】先主票，有余力再补加仓和冷门，资金分配合理。</span></div>
-            </div>
-            <p class="reason">先买主票覆盖荷兰+科特迪瓦让球方向；加仓覆盖瑞典穿盘；冷门用1:1覆盖荷兰不穿盘。德国-3深盘不买。</p>
-            <div class="spacer"></div>
-            <div class="divider"></div>
-            <div class="return-label">执行顺序</div>
-            <div class="return-amount">32 → 12 → 6</div>
         </article>
     </div>
 
