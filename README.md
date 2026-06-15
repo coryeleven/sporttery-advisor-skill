@@ -4,7 +4,7 @@
 
 ## 版本
 
-当前版本：**V5.5.2**
+当前版本：**V5.5.3**
 
 ## 功能
 
@@ -25,13 +25,26 @@
 
 不同 AI 模型（Mimo/Claude/GPT 等）会给出不同的分析结果。
 
-### 脚本模式
+### 脚本模式（可选）
 
 ```bash
-node sporttery_skill_v4.js
+node scripts/sporttery_skill_v4.js
 ```
 
-脚本会从竞彩网接口抓取当前足球可售赛事，并生成 HTML 面板。
+脚本会从竞彩网接口抓取当前足球可售赛事，并生成 HTML 面板到 `outputs/`。注意：脚本是辅助工具，Skill 的主入口仍为 `SKILL.md`。
+
+## 目录结构
+
+```text
+sporttery-advisor-skill/
+├── SKILL.md                         # Skill 主入口
+├── README.md                        # 仓库说明
+├── references/
+│   └── html-template-v5.5.md        # HTML 视觉与 DOM 模板规范
+├── scripts/
+│   └── sporttery_skill_v4.js        # 可选辅助脚本
+└── .gitignore
+```
 
 ## 界面
 

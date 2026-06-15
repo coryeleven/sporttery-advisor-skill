@@ -5,8 +5,10 @@ const path = require("path");
 const https = require("https");
 
 const API_URL = "https://webapi.sporttery.cn/gateway/uniform/football/getMatchCalculatorV1.qry?channel=c";
-const OUT_FILE = path.join(__dirname, "daily_sporttery_advisor_v4_2026-06-14.html");
-const CURRENT_FILE = path.join(__dirname, "daily_sporttery_advisor_2026-06-14.html");
+const ROOT_DIR = path.resolve(__dirname, "..");
+const OUTPUT_DIR = path.join(ROOT_DIR, "outputs");
+const OUT_FILE = path.join(OUTPUT_DIR, "daily_sporttery_advisor_v4_2026-06-14.html");
+const CURRENT_FILE = path.join(OUTPUT_DIR, "daily_sporttery_advisor_2026-06-14.html");
 
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
@@ -746,6 +748,7 @@ async function main() {
         hour12: false
     });
     const html = renderPage(day, matches, slip, generatedAt);
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     fs.writeFileSync(OUT_FILE, html, "utf8");
     fs.writeFileSync(CURRENT_FILE, html, "utf8");
     console.log(`generated ${OUT_FILE}`);
