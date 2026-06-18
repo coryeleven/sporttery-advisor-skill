@@ -36,6 +36,15 @@
 | 教训提炼 | 「如果重来」视角总结可改进点 |
 | 学习沉淀 | 复盘教训自动写入 SKILL.md「历史教训」附录，后续分析自动参考 |
 
+### 🤖 每日自动化
+
+| 功能 | 说明 |
+|------|------|
+| 预测存储 | 每次分析完成后自动保存预测快照到 `predictions/{matchDate}.json` |
+| 复盘自动读取 | 复盘时自动读取存储的预测数据，无需手动提供 |
+| 定时调度 | 配合 `/loop` 指令可实现早间分析 + 晚间复盘全自动闭环 |
+| 持续学习 | 复盘教训写入 SKILL.md，下次分析时 AI 自动参考 |
+
 ---
 
 ## 如何调用
@@ -89,10 +98,30 @@ git clone https://github.com/coryeleven/sporttery-advisor-skill.git \
 ```
 
 触发后 Skill 会：
-1. 搜索当天所有比赛的官方赛果
-2. 逐场对比你的预测 vs 实际结果
-3. 分析每处偏差的原因
-4. 总结教训，写入历史记录
+1. 自动读取 `predictions/{matchDate}.json` 中存储的预测数据
+2. 搜索当天所有比赛的官方赛果
+3. 逐场对比你的预测 vs 实际结果
+4. 分析每处偏差的原因
+5. 总结教训，写入 SKILL.md「历史教训」
+
+### 每日自动化（可选）
+
+通过 Claude Code 的 `/loop` 指令实现无人值守：
+
+```text
+# 早间分析（每天上午 9:00 自动跑）
+/loop 9:00 预算 M = 50。按每日体彩军师执行分析。
+
+# 晚间复盘（每天下午 15:00，等球都踢完）
+/loop 15:00 复盘今天的比赛。
+```
+
+自动化工作链：
+```
+上午 9:00 → 抓取 API → AI 分析 → 输出方案 → 存储 predictions/日期.json
+下午 15:00 → 读取预测 → 搜索赛果 → 逐场对比 → 教训写入 SKILL.md
+次日分析时 → AI 自动读「历史教训」→ 避免重复犯错
+```
 
 ---
 
@@ -176,6 +205,8 @@ git clone https://github.com/coryeleven/sporttery-advisor-skill.git \
 sporttery-advisor-skill/
 ├── SKILL.md                    # Skill 主入口（AI 行为规范）
 ├── README.md                   # 本文件
+├── predictions/                # 预测快照（每次分析自动保存）
+│   └── 2026-06-20.json         # 示例：matchDate 当天的预测数据
 ├── references/
 │   └── html-template-v5.5.md   # HTML 模板（已废弃，不再默认使用）
 ├── scripts/
@@ -189,6 +220,7 @@ sporttery-advisor-skill/
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| V5.11.0 | 2026-06-19 | 新增 Step 7 预测存储（`predictions/{matchDate}.json`）、复盘自动读取预测、每日自动化闭环 |
 | V5.10.0 | 2026-06-19 | 新增赛后复盘模式：赛果搜索 → 逐场对比 → 偏差归因 → 教训沉淀 |
 | V5.9.1 | 2026-06-19 | 修复日期筛选 bug：用户说"今天"必须匹配 businessDate |
 | V5.9.0 | 2026-06-18 | 购买指令改用球队名+大白话，不用场次编号 |
