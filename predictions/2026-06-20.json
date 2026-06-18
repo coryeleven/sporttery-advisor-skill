@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-06-19T00:21:11+08:00",
+  "businessDate": "2026-06-19",
+  "matchDate": "2026-06-20",
+  "budget": 50,
+  "matches": [
+    { "matchNumStr": "周五029", "homeTeam": "美国", "awayTeam": "澳大利亚", "matchTime": "03:00:00" },
+    { "matchNumStr": "周五030", "homeTeam": "苏格兰", "awayTeam": "摩洛哥", "matchTime": "06:00:00" },
+    { "matchNumStr": "周五031", "homeTeam": "巴西", "awayTeam": "海地", "matchTime": "08:30:00" },
+    { "matchNumStr": "周五032", "homeTeam": "土耳其", "awayTeam": "巴拉圭", "matchTime": "11:00:00" }
+  ],
+  "plans": [
+    {
+      "name": "稳健保底",
+      "type": "主票",
+      "play": "让球胜平负 2串1",
+      "bet": "买「巴西 让两球 胜」串「美国 让一球 胜+平」，8倍",
+      "amount": 32,
+      "returns": "69.39-89.96元",
+      "matches": ["巴西 vs 海地", "美国 vs 澳大利亚"]
+    },
+    {
+      "name": "价值发现",
+      "type": "加仓",
+      "play": "胜平负 单关",
+      "bet": "买「摩洛哥 胜+平」，3倍",
+      "amount": 12,
+      "returns": "9.54-19.68元",
+      "matches": ["苏格兰 vs 摩洛哥"]
+    },
+    {
+      "name": "高危搏杀",
+      "type": "冷门",
+      "play": "猜比分",
+      "bet": "买「土耳其 vs 巴拉圭 0:0」，3倍",
+      "amount": 6,
+      "returns": "54.00元",
+      "matches": ["土耳其 vs 巴拉圭"]
+    }
+  ]
+}
